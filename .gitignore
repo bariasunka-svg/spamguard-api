@@ -7,3 +7,4 @@ spam.db
 models/
 .env
 .DS_Store
+backup/
