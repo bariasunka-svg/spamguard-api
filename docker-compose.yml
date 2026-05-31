@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      - E:\V1_Upgraded_Thesis_Experiment\models:/app/models
+    environment:
+      - MODEL_PATH=./models/p3_full_fgm_ml256_s456/best
+      - CELERY_BROKER_URL=redis://redis:6379/0
+
+  worker:
+    build: .
+    command: celery -A tasks worker --loglevel=info
+    volumes:
+      - .:/app
+      - E:\V1_Upgraded_Thesis_Experiment\models:/app/models
+    environment:
+      - MODEL_PATH=./models/p3_full_fgm_ml256_s456/best
+      - CELERY_BROKER_URL=redis://redis:6379/0
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
