@@ -1,6 +1,6 @@
 # SpamGuard API
 
-> A production-grade spam detection REST API built on a DistilBERT-FGM model I trained across four benchmark email corpora as part of my Master's thesis in Information Management at Chaoyang University of Technology (CYUT), Taiwan.
+> A production-grade spam detection REST API built on a DistilBERT-FGM model we trained across four benchmark email corpora as part of our Master's thesis in Information Management at Chaoyang University of Technology (CYUT), Taiwan.
 
 ![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.111-009688?style=flat-square&logo=fastapi&logoColor=white)
@@ -28,9 +28,9 @@
 
 ## Overview
 
-SpamGuard API is the deployment layer for a spam classification model I developed during my Master's research. It exposes a fine-tuned DistilBERT model — trained with Fast Gradient Method (FGM) adversarial regularisation across four real-world email corpora — as a fully containerised REST service.
+SpamGuard API is the deployment layer for a spam classification model developed during our Master's research. It exposes a fine-tuned DistilBERT model — trained with Fast Gradient Method (FGM) adversarial regularisation across four real-world email corpora — as a fully containerised REST service.
 
-The service accepts raw email text and returns a structured verdict (`spam`, `ham`, or `uncertain`) alongside a calibrated confidence score. Emails classified as `uncertain` are architecturally designed to escalate to a Flan-T5 large language model for human review — implementing the Human-in-the-loop workflow I designed in my thesis cascade architecture.
+The service accepts raw email text and returns a structured verdict (`spam`, `ham`, or `uncertain`) alongside a calibrated confidence score. Emails classified as `uncertain` are architecturally designed to escalate to a Flan-T5 large language model for human review — implementing the Human-in-the-loop workflow designed in our thesis cascade architecture.
 
 **What this project demonstrates:**
 
@@ -80,7 +80,7 @@ The service accepts raw email text and returns a structured verdict (`spam`, `ha
 
 ### Three-Tier Cascade Design
 
-In my thesis I designed a three-tier cascade architecture to balance speed, accuracy, and operational cost. This API implements Tier 2.
+In the thesis, the study designed a three-tier cascade architecture to balance speed, accuracy, and operational cost. This API implements Tier 2.
 
 | Tier | Component | Trigger Condition | Role |
 |------|-----------|-------------------|------|
@@ -106,15 +106,15 @@ Tier 1 and Tier 3 integration are reserved for future releases. This repository 
 | Checkpoint | `p3_full_fgm_ml256_s456/best/` |
 | Parameters | ~66 million |
 
-### Why I Chose This Model
+### Why We Chose This Model
 
-In my thesis I systematically trained and evaluated 30 model configurations — 2 training methods × 3 token lengths × 5 random seeds — under Leave-One-Corpus-Out (LOCO) cross-domain testing. I chose **False Positive Rate (FPR)** as my primary optimisation target because blocking a legitimate email is a more costly error than missing spam in a production security system.
+We systematically trained and evaluated 30 model configurations — 2 training methods × 3 token lengths × 5 random seeds — under Leave-One-Corpus-Out (LOCO) cross-domain testing. We chose **False Positive Rate (FPR)** as our primary optimisation target because blocking a legitimate email is a more costly error than missing spam in a production security system.
 
 The `p3_full_fgm_ml256_s456` configuration achieved the lowest cross-domain FPR across all evaluation conditions, demonstrating robust generalisation to unseen email distributions. I selected this checkpoint for deployment.
 
-**Why FGM adversarial training?** During training, FGM exposes the model to adversarially perturbed text examples, improving its resistance to subtle variations — a property I designed specifically for cybersecurity deployment contexts where adversaries actively attempt to evade detection.
+**Why FGM adversarial training?** During training, FGM exposes the model to adversarially perturbed text examples, improving its resistance to subtle variations — a property we designed specifically for cybersecurity deployment contexts where adversaries actively attempt to evade detection.
 
-**Why 256 tokens?** 128 tokens truncated too many emails before they revealed their spam signals. 512 tokens doubled memory usage with no measurable accuracy gain. 256 is the sweet spot I identified experimentally.
+**Why 256 tokens?** 128 tokens truncated too many emails before they revealed their spam signals. 512 tokens doubled memory usage with no measurable accuracy gain. 256 is the sweet spot we identified experimentally.
 
 ### Inference Decision Thresholds
 
@@ -146,7 +146,7 @@ p_spam < 0.30  →  verdict: "ham"        (high confidence — deliver)
 ### Prerequisites
 
 - [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed and running
-- The trained model checkpoint placed at `./models/p3_full_fgm_ml256_s456/best/`
+- The trained model checkpoint placed at local repository `./models/p3_full_fgm_ml256_s456/best/`.
   *(Required files: `config.json`, `model.safetensors`, `tokenizer.json`, `tokenizer_config.json`)*
 
 > The model is not included in this repository due to its size (~260 MB).
@@ -338,14 +338,15 @@ spamguard-api/
 
 ## Academic Context
 
-I built this project as part of my Master's research at Chaoyang University of Technology (CYUT), Taiwan, where I investigated cross-domain email spam detection using adversarially trained transformer models.
+We built this project as part of our Master's research at Chaoyang University of Technology (CYUT), Taiwan, where we investigated cross-domain email spam detection using adversarially trained transformer models.
 
-**Thesis title:** *Cross-Domain Email Spam Detection Using Adversarially Trained Transformer Models*  
+**Thesis title:** *Disentangling Data Diversity and Adversarial Robustness in Cross-Domain Email Spam Detection: Empirical Evidence from Multi-Corpus DistilBERT Training*  
 **Author:** Bari Asunka  
+**Advisor:** 陳金鈴 博士 (Chin-Ling Chen)
 **Institution:** Chaoyang University of Technology (CYUT), Taichung, Taiwan  
 **Degree:** Master of Science in Information Management
 
-### How My Thesis Research Connects to This API
+### How Our Thesis Research Connects to This API
 
 | Thesis Contribution | How It Appears in This Codebase |
 |---------------------|---------------------------------|
